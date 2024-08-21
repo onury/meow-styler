@@ -7,7 +7,7 @@ import c from 'chalk';
 
 // own modules
 import { CliOptions, AnyFlag } from './types.js';
-import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap } from './utils.js';
+import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd } from './utils.js';
 
 /**
  * Styled version of the `meow` function that provides a more customizable CLI
@@ -54,8 +54,10 @@ export function meows(options: CliOptions): ReturnType<typeof meow> {
     optList.push(option(name, flag));
   });
 
-  // eslint-disable-next-line no-control-regex
-  const titleHasBg = /\u001B\[49m/.test(colors.title('test')); // look for the bg close char
+  // test for the bg close character in the title color
+  const titleHasBg = reBgEnd.test(colors.title('test'))
+  /* v8 ignore next */ && c.level > 0; // check if chalk detected color support
+
   // if a bg color is defined for a title, add a space before and after the title
   const title = (str: string): string => {
     const s = titleHasBg ? ' ' : '';

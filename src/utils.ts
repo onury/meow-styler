@@ -18,6 +18,8 @@ export const defaultColors: Record<keyof CliColors, ChalkInstance> = {
   flagDefault: c.gray
 };
 const flagSep = ', ';
+// eslint-disable-next-line no-control-regex
+export const reBgEnd = /\u001B\[49m/;
 
 /**
  * Ensures the availability of colors for the CLI.
