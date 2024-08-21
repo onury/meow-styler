@@ -2,6 +2,7 @@ import { ChalkInstance } from 'chalk';
 import { CliLayout, CliColors, AnyFlag, CliFlags } from './types.js';
 export declare const defaultLayout: Required<CliLayout>;
 export declare const defaultColors: Record<keyof CliColors, ChalkInstance>;
+export declare const reBgEnd: RegExp;
 /**
  * Ensures the availability of colors for the CLI.
  * @param [userColors] - Optional user-defined colors.
@@ -26,7 +27,7 @@ export declare function getFlagNames(name: string, flag: AnyFlag): string;
  * represents a line of text that does not exceed the specified wrapAt length.
  * @param input - The input string to be wrapped.
  * @param wrapAt - The maximum length of each line.
- * @param [chlk] - The ChalkInstance used for styling the lines.
+ * @param chlk - The ChalkInstance used for styling the lines.
  * @returns An array of strings representing the wrapped lines.
  */
-export declare function wordWrap(input: string, wrapAt: number, chlk?: ChalkInstance): string[];
+export declare function wordWrap(input: string, wrapAt: number, chlk: ChalkInstance): string[];
