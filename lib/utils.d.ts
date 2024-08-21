@@ -31,3 +31,9 @@ export declare function getFlagNames(name: string, flag: AnyFlag): string;
  * @returns An array of strings representing the wrapped lines.
  */
 export declare function wordWrap(input: string, wrapAt: number, chlk: ChalkInstance): string[];
+/**
+ * Trims the leading and trailing whitespace (including new lines) from a
+ * string.
+ * @param [str] - The string to trim.
+ */
+export declare function hardTrim(str?: string): string;
