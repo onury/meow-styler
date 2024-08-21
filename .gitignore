@@ -2,6 +2,7 @@ backup
 _backup
 coverage/*
 test/.coverage/*
+test/run.ts
 node_modules
 npm-debug.log
 tmp
