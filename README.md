@@ -8,8 +8,6 @@
   <a href="https://raw.github.com/onury/meow-styler"><img src="https://img.shields.io/npm/v/meow-styler.svg?style=flat&label=&color=%2394306B&logo=npm" alt="version" /></a>
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/ESM-F7DF1E?style=flat" alt="ESM" /></a>
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/TS-3260C7?style=flat" alt="TS" /></a>
-  <br />
-    <sub>© 2024, Onur Yıldırım (<b><a href="https://github.com/onury">@onury</a></b>)</sub>
 </p>
 <br />
 
@@ -79,4 +77,4 @@ For more details about **meow** and options, see its [repo docs](https://github.
 
 ## License
 
-**MIT** ©️ Onur Yıldırım.
+**MIT** ©️ Onur Yıldırım ([@onury](https://github.com/onury)).
