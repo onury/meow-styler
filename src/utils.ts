@@ -87,6 +87,7 @@ export function getFlagNames(name: string, flag: AnyFlag): string {
  * @returns An array of strings representing the wrapped lines.
  */
 export function wordWrap(input: string, wrapAt: number, chlk: ChalkInstance): string[] {
+  input = hardTrim(input);
   // split by any whitespace, keeping separators (spaces and newlines)
   const words = input.split(/(\s+)/);
 
@@ -121,6 +122,15 @@ export function wordWrap(input: string, wrapAt: number, chlk: ChalkInstance): st
   }
 
   return result;
+}
+
+/**
+ * Trims the leading and trailing whitespace (including new lines) from a
+ * string.
+ * @param [str] - The string to trim.
+ */
+export function hardTrim(str?: string): string {
+  return (str ?? '').replace(/^\s+|\s+$/g, '');
 }
 
 /**

@@ -63,23 +63,27 @@ const expected = (opts: CliOptions): string => {
   const usage = typeof opts.usage === 'function' ? opts.usage(c) : opts.usage;
   const examples = typeof opts.examples === 'function' ? opts.examples(c) : opts.examples;
 
+  const sUsage = usage ? `${sHIndent}${c.yellow.bold('Usage')}
+${sHIndent}${sIndent}${usage}
+
+` : '';
+
+  const sExamples = examples ? `
+${sHIndent}${c.yellow.bold('Examples')}
+${sHIndent}${sIndent}${examples?.split(/[\r\n]/).map(s => s.trim()).join(`\n${sHIndent}${sIndent}`)}
+` : '';
+
   return `
 ${sHIndent}${c.white(opts.description)}
 
-${sHIndent}${c.yellow.bold('Usage')}
-${sHIndent}${sIndent}${usage}
-
-${sHIndent}${c.yellow.bold('Options')}
+${sUsage}${sHIndent}${c.yellow.bold('Options')}
 ${sHIndent}${sIndent}${c.cyan('--flag, -f')}    ${sSpacing}${c.green(f.flag.description)}
 ${sHIndent}${sIndent}${c.cyan('--longest-flag')}${sSpacing}${c.green(longestDesc1)}
 ${sLeftSpace}${c.green(longestDesc2 + ' One of: ' + f.longestFlag.choices?.join(', '))}
 ${sHIndent}${sIndent}${c.cyan('--no-desc')}     ${sSpacing}${c.green(f.noDesc.type)}
 ${sLeftSpace}${c.gray('Default: ' + f.noDesc.default)}
 ${sHIndent}${sIndent}${c.cyan('--none')}       ${sSpacing}${` `}
-
-${sHIndent}${c.yellow.bold('Examples')}
-${sHIndent}${sIndent}${examples?.split(/[\r\n]/).map(s => s.trim()).join(`\n${sHIndent}${sIndent}`)}
-`;
+${sExamples}`;
 };
 
 describe('meows', () => {
@@ -90,27 +94,35 @@ describe('meows', () => {
 
   test('usage', () => {
     const usage = (options.usage as Function)(c);
-    const o = {
+    const o: CliOptions = {
       ...options,
       usage: c.dim.cyan('$') + c.blueBright('bar')
     };
     expect(meows(o).help).toMatch(
       expected(o)
-        .replace(usage, o.usage)
+        .replace(usage, o.usage as string)
     );
+
+    // no examples
+    o.usage = undefined;
+    expect(meows(o).help).toMatch(expected(o));
   });
 
   test('examples', () => {
     const examples = (options.examples as Function)(c);
-    const o = {
+    const o: CliOptions = {
       ...options,
-      examples: + `${c.dim.cyan('$')} ${c.blueBright('bar')} ${c.cyan('https://test.com ')}${c.green('-f val')}`
+      examples: `${c.dim.cyan('$')} ${c.blueBright('bar')} ${c.cyan('https://test.com ')}${c.green('-f val')}`
         + `\n${c.dim.cyan('$')} ${c.blueBright('baz')} ${c.cyan('https://google.com ')}${c.green('--longest-flag val')}`
     };
     expect(meows(o).help).toMatch(
       expected(o)
-        .replace(examples, o.examples)
+        .replace(examples, o.examples as string)
     );
+
+    // no examples
+    o.examples = undefined;
+    expect(meows(o).help).toMatch(expected(o));
   });
 
   test('colors object', () => {

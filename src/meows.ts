@@ -7,7 +7,7 @@ import c from 'chalk';
 
 // own modules
 import { CliOptions, AnyFlag } from './types.js';
-import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd } from './utils.js';
+import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd, hardTrim } from './utils.js';
 
 /**
  * Styled version of the `meow` function that provides a more customizable CLI
@@ -80,13 +80,17 @@ export function meows(options: CliOptions): ReturnType<typeof meow> {
   const innerIndent = (str: string): string => ' '.repeat(indent)
     + str.split(/[\r\n]/).map(s => s.trim()).join(EOL + ' '.repeat(indent));
 
-  const sUsage = typeof options.usage === 'function' ? options.usage(c) : options.usage;
+  const sUsage = hardTrim(
+    typeof options.usage === 'function' ? options.usage(c) : options.usage
+  );
   if (sUsage) helpMessage.push(title('Usage'), innerIndent(sUsage) + EOL);
 
   const sOptions = optList.join(EOL);
   if (sOptions.length > 0) helpMessage.push(title('Options'), sOptions, '');
 
-  const sExamples = typeof options.examples === 'function' ? options.examples(c) : options.examples;
+  const sExamples = hardTrim(
+    typeof options.examples === 'function' ? options.examples(c) : options.examples
+  );
   if (sExamples) helpMessage.push(title('Examples'), innerIndent(sExamples));
 
   return meow(helpMessage.join(EOL), options);
