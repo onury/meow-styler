@@ -1,4 +1,4 @@
-<h1 align="center" style="margin-bottom:30px">
+<h1 align="center" style="margin-bottom:20px">
   <code>meow-styler</code>
 </h1>
 
@@ -9,11 +9,15 @@
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/ESM-F7DF1E?style=flat" alt="ESM" /></a>
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/TS-3260C7?style=flat" alt="TS" /></a>
 </p>
-<br />
 
-Colors & formatting for [meow](https://github.com/sindresorhus/meow) CLI app helper.
+<p align="center">
+Colors & formatting for <a href="https://github.com/sindresorhus/meow">meow</a> CLI app helper.
+</p>
+<p align="center">
+<img alt="meow-styler" src="https://github.com/onury/meow-styler/raw/main/_assets/screenshot.png" width="600" height="auto" style="margin-bottom:10px" />
+</p>
 
-## Installation
+## **Installation**
 
 ```sh
 npm i meow-styler meow
@@ -21,10 +25,10 @@ npm i meow-styler meow
 
 **Important**: This module is **ESM** 🔆. Please [**read this**](https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7). 
 
-
 ## Usage
 
 `meow-styler` is just a helper that keeps the `meow` API almost the same and only adds the following options:
+
 - Each flag has a `description` field.
 - Options object includes `usage`, `layout`, `colors` and `examples` fields.
 
@@ -39,7 +43,7 @@ const cli = meows({
   description: 'My awesome CLI',
   usage: 'foo <input>',
   examples: c => `
-  $ foo unicorns ${c.yellow('--rainbow -c')} beer
+  ${c.dim.cyan('$')} foo unicorns ${c.yellow('--rainbow -c')} beer
   🌈 unicorns 🍺
   `,
   helpIndent: 2,
@@ -52,7 +56,7 @@ const cli = meows({
     description: c.white,
     flag: c.greenBright.bold,
     flagDescription: c.white,
-    title: 'yellow.italic', // can also pass a string
+    title: 'yellow.italic' // can also pass a string
   }),
   flags: {
     rainbow: {
