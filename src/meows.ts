@@ -55,8 +55,9 @@ export function meows(options: CliOptions): ReturnType<typeof meow> {
   });
 
   // test for the bg close character in the title color
-  const titleHasBg = reBgEnd.test(colors.title('test'))
-  /* v8 ignore next */ && c.level > 0; // check if chalk detected color support
+  // and if chalk has detected color support
+  /* v8 ignore next */
+  const titleHasBg = reBgEnd.test(colors.title('test')) && c.level > 0;
 
   // if a bg color is defined for a title, add a space before and after the title
   const title = (str: string): string => {
