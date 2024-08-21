@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/onury/meow-styler/actions/workflows/node.js.yml"><img src="https://github.com/onury/meow-styler/actions/workflows/node.js.yml/badge.svg" alt="build" /></a>
-  <a href="https://github.com/onury/meow-styler/blob/main/vitest.config.ts"><img src="https://img.shields.io/badge/coverage-100%25-2BB150?logo=vitest&style=flat" alt="coverage" /></a>
+  <a href="https://github.com/onury/meow-styler/actions/workflows/node.js.yml"><img src="https://img.shields.io/badge/coverage-100%25-2BB150?logo=vitest&style=flat" alt="coverage" /></a>
   <a href="https://www.npmjs.com/package/meow-styler"><img src="https://img.shields.io/npm/v/meow-styler.svg?style=flat&label=&color=%2394306B&logo=npm" alt="version" /></a>
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/ESM-F7DF1E?style=flat" alt="ESM" /></a>
   <a href="https://gist.github.com/onury/d3f3d765d7db2e8b2d050d14315f2ac7"><img src="https://img.shields.io/badge/TS-3260C7?style=flat" alt="TS" /></a>
