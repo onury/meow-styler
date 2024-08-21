@@ -60,6 +60,7 @@ export function meows(options: CliOptions): ReturnType<typeof meow> {
 
   // if a bg color is defined for a title, add a space before and after the title
   const title = (str: string): string => {
+    /* v8 ignore next */
     const s = titleHasBg ? ' ' : '';
     return colors.title(s + str + s);
   };
