@@ -25,8 +25,20 @@ export type CliFlags = Record<string, AnyFlag>;
  * Represents the layout options for the CLI.
  */
 export interface CliLayout {
+  /**
+   * Spacing between flag(s) and flag description.
+   * @default 2
+   */
   spacing?: number;
+  /**
+   * Total width of the CLI output (including `helpIndent`).
+   * @default 80
+   */
   width?: number;
+  /**
+   * Inner indentation for flag(s), usage text & example text.
+   * @default 2
+   */
   indent?: number;
 }
 
