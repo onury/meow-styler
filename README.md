@@ -14,7 +14,7 @@
 </p>
 <br />
 
-Enables styles & formatting for [meow](https://github.com/sindresorhus/meow) CLI app helper.
+Colors & formatting for [meow](https://github.com/sindresorhus/meow) CLI app helper.
 
 ## Installation
 
