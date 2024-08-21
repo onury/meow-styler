@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -91,7 +92,7 @@ describe('meows', () => {
     const usage = (options.usage as Function)(c);
     const o = {
       ...options,
-      usage: c.dim.cyan('$') + c.blueBright(' bar ')
+      usage: c.dim.cyan('$') + c.blueBright('bar')
     };
     expect(meows(o).help).toMatch(
       expected(o)
@@ -125,11 +126,16 @@ describe('meows', () => {
         title: 'yellow.bgRed.bold'
       }
     };
+
+    // titles include a leading and trailing space when bg color is defined. but
+    // this depends on the color support level
+    const wrap = (str: string): string => c.level > 0 ? ` ${str} ` : str;
+
     expect(meows(o).help).toMatch(
       expected(o)
-        .replace(c.yellow.bold('Usage'), c.yellow.bgRed.bold(' Usage '))
-        .replace(c.yellow.bold('Options'), c.yellow.bgRed.bold(' Options '))
-        .replace(c.yellow.bold('Examples'), c.yellow.bgRed.bold(' Examples '))
+        .replace(c.yellow.bold('Usage'), c.yellow.bgRed.bold(wrap('Usage')))
+        .replace(c.yellow.bold('Options'), c.yellow.bgRed.bold(wrap('Options')))
+        .replace(c.yellow.bold('Examples'), c.yellow.bgRed.bold(wrap('Examples')))
     );
   });
 
