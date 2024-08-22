@@ -1,25 +1,35 @@
 // dep modules
-import { Flag, Options } from 'meow';
+import { Flag, FlagType, Options, Result } from 'meow';
 import c, { ChalkInstance } from 'chalk';
 
 export { c as chalk };
 
-type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
-type BooleanFlag = Flag<'boolean', boolean> | Flag<'boolean', boolean[], true>;
-type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
+type TypedFlag<F extends AnyFlag> =
+  F extends { type: 'number' }
+    ? number
+    : F extends { type: 'string' }
+      ? string
+      : F extends { type: 'boolean' }
+        ? boolean
+        : unknown;
+
+type ExtendedFlag<PrimitiveType extends FlagType, Type, IsMultiple = false> = Flag<PrimitiveType, Type, IsMultiple> & {
+  /** The description of the flag. */
+  description?: string;
+};
+type StringFlag = ExtendedFlag<'string', string> | ExtendedFlag<'string', string[], true>;
+type BooleanFlag = ExtendedFlag<'boolean', boolean> | ExtendedFlag<'boolean', boolean[], true>;
+type NumberFlag = ExtendedFlag<'number', number> | ExtendedFlag<'number', number[], true>;
 
 /**
  * Represents a flag that can be of type StringFlag, BooleanFlag, or NumberFlag.
  */
-export type AnyFlag = (StringFlag | BooleanFlag | NumberFlag) & {
-  /** The description of the flag. */
-  description?: string;
-};
+export type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 
 /**
  * Represents a collection of CLI flags.
  */
-export type CliFlags = Record<string, AnyFlag>;
+export type AnyFlags = Record<string, AnyFlag>;
 
 /**
  * Represents the layout options for the CLI.
@@ -56,7 +66,7 @@ export interface CliColors {
 /**
  * Represents the options for the CLI.
  */
-export interface CliOptions extends Options<CliFlags> {
+export type CliOptions<Flags extends AnyFlags> = Options<Flags> & {
   /**
    * The usage information for the CLI.
    */
@@ -73,4 +83,15 @@ export interface CliOptions extends Options<CliFlags> {
    * The color options for the CLI.
    */
   colors?: CliColors | ((chalk: ChalkInstance) => CliColors);
-}
+};
+
+/**
+ * Represents the result of a CLI operation.
+ */
+export type CliResult<Flags extends AnyFlags> = Omit<Result<Flags>, 'flags'> & {
+  flags: {
+    [F in keyof Flags]: Flags[F] extends { isMultiple: true }
+      ? TypedFlag<Flags[F]>[]
+      : TypedFlag<Flags[F]>;
+  };
+};

@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { defaultLayout } from '../src/utils.js';
-import { meows, chalk as c, CliOptions, CliFlags, CliLayout } from '../src/index.js';
+import { meows, chalk as c, CliOptions, AnyFlags, CliLayout } from '../src/index.js';
 
 const longestDesc1 = 'Longest flag with choices and longest description that';
 const longestDesc2 = 'should word-wrap.';
@@ -59,7 +59,7 @@ const calc = (opts: CliOptions) => {
 
 const expected = (opts: CliOptions): string => {
   const { sLeftSpace, sHIndent, sIndent, sSpacing } = calc(opts);
-  const f = opts.flags as CliFlags;
+  const f = opts.flags as AnyFlags;
   const usage = typeof opts.usage === 'function' ? opts.usage(c) : opts.usage;
   const examples = typeof opts.examples === 'function' ? opts.examples(c) : opts.examples;
 

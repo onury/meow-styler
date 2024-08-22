@@ -2,7 +2,7 @@
 import c, { Chalk, ChalkInstance } from 'chalk';
 
 // own modules
-import { CliLayout, CliColors, AnyFlag, CliFlags } from './types.js';
+import { CliLayout, CliColors, AnyFlag, AnyFlags } from './types.js';
 
 // constants
 export const defaultLayout: Required<CliLayout> = {
@@ -43,7 +43,7 @@ export function ensureColors(userColors?: CliColors): Record<keyof CliColors, Ch
  * @param [cb] - The callback function to be invoked for each flag. It receives
  * the flag's name and the flag itself as parameters.
  */
-export function eachFlag(flags?: CliFlags, cb?: (name: string, flag: AnyFlag) => void): void {
+export function eachFlag(flags?: AnyFlags, cb?: (name: string, flag: AnyFlag) => void): void {
   for (const name in flags) {
     if (cb && Object.prototype.hasOwnProperty.call(flags, name)) {
       cb(name, flags[name]);

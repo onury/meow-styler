@@ -6,7 +6,7 @@ import meow from 'meow';
 import c from 'chalk';
 
 // own modules
-import { CliOptions, AnyFlag } from './types.js';
+import { CliOptions, AnyFlag, CliResult, AnyFlags } from './types.js';
 import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd, hardTrim } from './utils.js';
 
 /**
@@ -14,7 +14,7 @@ import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd,
  * output.
  * @param options - The options object for configuring CLI output.
  */
-export function meows(options: CliOptions): ReturnType<typeof meow> {
+export function meows<T extends AnyFlags>(options: CliOptions<T>): CliResult<T> {
   const { spacing, indent } = {
     ...defaultLayout,
     ...options?.layout
@@ -93,5 +93,5 @@ export function meows(options: CliOptions): ReturnType<typeof meow> {
   );
   if (sExamples) helpMessage.push(title('Examples'), innerIndent(sExamples));
 
-  return meow(helpMessage.join(EOL), options);
+  return meow(helpMessage.join(EOL), options) as CliResult<T>;
 }
