@@ -1,5 +1,5 @@
 import { ChalkInstance } from 'chalk';
-import { CliLayout, CliColors, AnyFlag, CliFlags } from './types.js';
+import { CliLayout, CliColors, AnyFlag, AnyFlags } from './types.js';
 export declare const defaultLayout: Required<CliLayout>;
 export declare const defaultColors: Record<keyof CliColors, ChalkInstance>;
 export declare const reBgEnd: RegExp;
@@ -15,7 +15,7 @@ export declare function ensureColors(userColors?: CliColors): Record<keyof CliCo
  * @param [cb] - The callback function to be invoked for each flag. It receives
  * the flag's name and the flag itself as parameters.
  */
-export declare function eachFlag(flags?: CliFlags, cb?: (name: string, flag: AnyFlag) => void): void;
+export declare function eachFlag(flags?: AnyFlags, cb?: (name: string, flag: AnyFlag) => void): void;
 /**
  * Retrieves the flag names for a given flag.
  * @param name - The name of the flag.
