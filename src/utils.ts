@@ -1,8 +1,8 @@
 // dep modules
-import c, { Chalk, ChalkInstance } from 'chalk';
+import c, { Chalk, type ChalkInstance } from 'chalk';
 
 // own modules
-import { CliLayout, CliColors, AnyFlag, AnyFlags } from './types.js';
+import type { AnyFlag, AnyFlags, CliColors, CliLayout } from './types.js';
 
 // constants
 export const defaultLayout: Required<CliLayout> = {
@@ -18,7 +18,6 @@ export const defaultColors: Record<keyof CliColors, ChalkInstance> = {
   flagDefault: c.gray
 };
 const flagSep = ', ';
-// eslint-disable-next-line no-control-regex
 export const reBgEnd = /\u001B\[49m/;
 
 /**
@@ -27,11 +26,8 @@ export const reBgEnd = /\u001B\[49m/;
  */
 export function ensureColors(userColors?: CliColors): Record<keyof CliColors, ChalkInstance> {
   const colors = { ...defaultColors };
-  // eslint-disable-next-line guard-for-in
   for (const key in defaultColors) {
-    colors[key] = userColors?.[key]
-      ? getChalk(userColors[key])
-      : defaultColors[key];
+    colors[key] = userColors?.[key] ? getChalk(userColors[key]) : defaultColors[key];
   }
   return colors;
 }
@@ -43,9 +39,13 @@ export function ensureColors(userColors?: CliColors): Record<keyof CliColors, Ch
  * @param [cb] - The callback function to be invoked for each flag. It receives
  * the flag's name and the flag itself as parameters.
  */
-export function eachFlag(flags?: AnyFlags, cb?: (name: string, flag: AnyFlag) => void): void {
+export function eachFlag(
+  flags: AnyFlags | undefined,
+  cb: (name: string, flag: AnyFlag) => void
+): void {
   for (const name in flags) {
-    if (cb && Object.prototype.hasOwnProperty.call(flags, name)) {
+    // skip inherited (e.g. prototype-polluted) enumerable keys
+    if (Object.hasOwn(flags, name)) {
       cb(name, flags[name]);
     }
   }
@@ -57,9 +57,7 @@ export function eachFlag(flags?: AnyFlags, cb?: (name: string, flag: AnyFlag) =>
  */
 function camelToFlag(str: string): string {
   const prefix = str.length > 1 ? '--' : '-';
-  return prefix + str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .toLowerCase();
+  return prefix + str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
 /**
@@ -98,12 +96,11 @@ export function wordWrap(input: string, wrapAt: number, chlk: ChalkInstance): st
   let currentLine = '';
 
   for (const word of words) {
-    // handle newlines as hard breaks
-    if (word.match(/[\r\n]/)) {
-      if (currentLine) {
-        result.push(chlk(currentLine.trim()));
-        currentLine = '';
-      }
+    // handle newlines as hard breaks; after hardTrim() a newline token always
+    // follows a word, so currentLine is non-empty here
+    if (/[\r\n]/.test(word)) {
+      result.push(chlk(currentLine.trim()));
+      currentLine = '';
       continue; // ignore the newline character itself
     }
 
@@ -143,10 +140,11 @@ export function hardTrim(str?: string): string {
 function getChalk(color: string | ChalkInstance): ChalkInstance {
   if (typeof color !== 'string') return color;
   if (color.startsWith('#')) return c.hex(color);
-  if (!color.includes('.')) return c[color];
 
-  const styles = color.split('.');
+  // walk the dot-separated style chain (a single name is just a chain of one)
   let chlk = new Chalk();
-  styles.forEach(style => { chlk = chlk[style]; });
+  for (const style of color.split('.')) {
+    chlk = chlk[style];
+  }
   return chlk;
 }

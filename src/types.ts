@@ -1,19 +1,23 @@
 // dep modules
-import { Flag, FlagType, Options, Result } from 'meow';
-import c, { ChalkInstance } from 'chalk';
+
+import c, { type ChalkInstance } from 'chalk';
+import type { Flag, FlagType, Options, Result } from 'meow';
 
 export { c as chalk };
 
-type TypedFlag<F extends AnyFlag> =
-  F extends { type: 'number' }
-    ? number
-    : F extends { type: 'string' }
-      ? string
-      : F extends { type: 'boolean' }
-        ? boolean
-        : unknown;
+type TypedFlag<F extends AnyFlag> = F extends { type: 'number' }
+  ? number
+  : F extends { type: 'string' }
+    ? string
+    : F extends { type: 'boolean' }
+      ? boolean
+      : unknown;
 
-type ExtendedFlag<PrimitiveType extends FlagType, Type, IsMultiple = false> = Flag<PrimitiveType, Type, IsMultiple> & {
+type ExtendedFlag<PrimitiveType extends FlagType, Type, IsMultiple = false> = Flag<
+  PrimitiveType,
+  Type,
+  IsMultiple
+> & {
   /** The description of the flag. */
   description?: string;
 };
@@ -66,7 +70,7 @@ export interface CliColors {
 /**
  * Represents the options for the CLI.
  */
-export type CliOptions<Flags extends AnyFlags> = Options<Flags> & {
+export type CliOptions<Flags extends AnyFlags = AnyFlags> = Options<Flags> & {
   /**
    * The usage information for the CLI.
    */
@@ -88,7 +92,7 @@ export type CliOptions<Flags extends AnyFlags> = Options<Flags> & {
 /**
  * Represents the result of a CLI operation.
  */
-export type CliResult<Flags extends AnyFlags> = Omit<Result<Flags>, 'flags'> & {
+export type CliResult<Flags extends AnyFlags = AnyFlags> = Omit<Result<Flags>, 'flags'> & {
   flags: {
     [F in keyof Flags]: Flags[F] extends { isMultiple: true }
       ? TypedFlag<Flags[F]>[]

@@ -1,13 +1,20 @@
 // core modules
 import { EOL } from 'node:os';
-
+import c from 'chalk';
 // dep modules
 import meow from 'meow';
-import c from 'chalk';
 
 // own modules
-import { CliOptions, AnyFlag, CliResult, AnyFlags } from './types.js';
-import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd, hardTrim } from './utils.js';
+import type { AnyFlag, AnyFlags, CliOptions, CliResult } from './types.js';
+import {
+  defaultLayout,
+  eachFlag,
+  ensureColors,
+  getFlagNames,
+  hardTrim,
+  reBgEnd,
+  wordWrap
+} from './utils.js';
 
 /**
  * Styled version of the `meow` function that provides a more customizable CLI
@@ -17,20 +24,18 @@ import { defaultLayout, eachFlag, getFlagNames, ensureColors, wordWrap, reBgEnd,
 export function meows<T extends AnyFlags>(options: CliOptions<T>): CliResult<T> {
   const { spacing, indent } = {
     ...defaultLayout,
-    ...options?.layout
+    ...options.layout
   };
-  const width = (options?.layout?.width || defaultLayout.width) - (options.helpIndent || 0);
+  const width = (options.layout?.width || defaultLayout.width) - (options.helpIndent || 0);
 
   let leftWidth = 0;
-  eachFlag(options?.flags, (name, flag) => {
+  eachFlag(options.flags, (name, flag) => {
     const names = getFlagNames(name, flag);
     leftWidth = Math.max(leftWidth, names.length);
   });
   const rightWidth = width - indent - leftWidth - spacing;
 
-  const userColors = typeof options?.colors === 'function'
-    ? options.colors(c)
-    : options?.colors;
+  const userColors = typeof options.colors === 'function' ? options.colors(c) : options.colors;
   const colors = ensureColors(userColors);
 
   const option = (name: string, flag: AnyFlag): string => {
@@ -41,27 +46,29 @@ export function meows<T extends AnyFlags>(options: CliOptions<T>): CliResult<T> 
     const current = indent + names.length + spacing;
     const choicesStr = choices ? ` One of: ${choices.join(', ')}` : '';
 
-    return ' '.repeat(indent)
-      + colors.flag(names)
-      + ' '.repeat(spacing)
-      + ' '.repeat(Math.max(rightStart - current, 0))
-      + wordWrap(description + choicesStr, rightWidth, colors.flagDescription).join(EOL + ' '.repeat(rightStart))
-      + (defa ? `${EOL}${' '.repeat(rightStart)}${colors.flagDefault('Default: ' + defa)}` : '');
+    return (
+      ' '.repeat(indent) +
+      colors.flag(names) +
+      ' '.repeat(spacing) +
+      ' '.repeat(Math.max(rightStart - current, 0)) +
+      wordWrap(description + choicesStr, rightWidth, colors.flagDescription).join(
+        EOL + ' '.repeat(rightStart)
+      ) +
+      (defa ? `${EOL}${' '.repeat(rightStart)}${colors.flagDefault('Default: ' + defa)}` : '')
+    );
   };
 
   const optList: string[] = [];
-  eachFlag(options?.flags, (name, flag) => {
+  eachFlag(options.flags, (name, flag) => {
     optList.push(option(name, flag));
   });
 
-  // test for the bg close character in the title color
-  // and if chalk has detected color support
-  /* v8 ignore next */
-  const titleHasBg = reBgEnd.test(colors.title('test')) && c.level > 0;
+  // a title has a background when its color emits the bg-close sequence; at
+  // color level 0 chalk emits no ANSI at all, so this is implicitly false
+  const titleHasBg = reBgEnd.test(colors.title('test'));
 
   // if a bg color is defined for a title, add a space before and after the title
   const title = (str: string): string => {
-    /* v8 ignore next */
     const s = titleHasBg ? ' ' : '';
     return colors.title(s + str + s);
   };
@@ -77,12 +84,14 @@ export function meows<T extends AnyFlags>(options: CliOptions<T>): CliResult<T> 
 
   const helpMessage: string[] = [];
 
-  const innerIndent = (str: string): string => ' '.repeat(indent)
-    + str.split(/[\r\n]/).map(s => s.trim()).join(EOL + ' '.repeat(indent));
+  const innerIndent = (str: string): string =>
+    ' '.repeat(indent) +
+    str
+      .split(/[\r\n]/)
+      .map((s) => s.trim())
+      .join(EOL + ' '.repeat(indent));
 
-  const sUsage = hardTrim(
-    typeof options.usage === 'function' ? options.usage(c) : options.usage
-  );
+  const sUsage = hardTrim(typeof options.usage === 'function' ? options.usage(c) : options.usage);
   if (sUsage) helpMessage.push(title('Usage'), innerIndent(sUsage) + EOL);
 
   const sOptions = optList.join(EOL);
