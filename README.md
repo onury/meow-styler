@@ -15,7 +15,7 @@
 Colors & formatting for <a href="https://github.com/sindresorhus/meow">meow</a> CLI app helper.
 </p>
 <p align="center">
-<img alt="meow-styler" src="https://github.com/onury/meow-styler/raw/main/_assets/screenshot.png" width="600" height="auto" style="margin-bottom:10px" />
+<img alt="meow-styler" src="https://github.com/onury/meow-styler/raw/main/screenshot.png" width="600" height="auto" style="margin-bottom:10px" />
 </p>
 
 ## **Installation**
