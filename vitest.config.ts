@@ -11,7 +11,7 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'lcov', 'json-summary'],
-      reportsDirectory: '_backup/reports/coverage',
+      reportsDirectory: 'test/coverage',
       include: ['src/**/*.ts'],
       thresholds: {
         lines: 100,
